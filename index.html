@@ -93,8 +93,10 @@
   .meta{
     border:1px solid var(--line);
     background:var(--panel);
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    display:flex;
+    flex-direction:column;
+    flex-wrap:wrap;
+    gap:12px;
   }
   .meta div{padding:12px 14px; border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
   .meta div:nth-child(2n){border-right:0}
@@ -189,14 +191,11 @@
 
   <div class="hero">
     <p class="eyebrow">personal site — est. 2026</p>
-    <h1>Alex<span class="accent">.</span></h1>
+    <h1>FurrestFire<span class="accent">.</span></h1>
     <p class="tagline">Writer, reader, gamer. I make small things, keep long notes on characters that don't exist, and spend too much time in games with a story worth following.<span class="cursor"></span></p>
 
     <dl class="meta">
-      <div><dt>alias</dt><dd>FurrestFire</dd></div>
-      <div><dt>based</dt><dd>New York, US</dd></div>
-      <div><dt>born</dt><dd>2007</dd></div>
-      <div><dt>interests</dt><dd>gaming · writing · reading</dd></div>
+      <dt>about</dt><dd>Writer, reader, gamer. Small things, long notes on characters that don't exist; spend time in games with a story worth following.</dd>
     </dl>
   </div>
 

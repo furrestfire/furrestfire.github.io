@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>furrestfire // node 01</title>
-<meta name="description" content="FurrestFire — a writer, reader and gamer. Character-driven fiction, SCP:RP, games with a story worth following.">
+<meta name="description" content="FurrestFire — the coolest, the ultimate, the best. One static page, zero trackers.">
 <meta name="theme-color" content="#0d110f">
 <meta name="color-scheme" content="dark">
 <meta property="og:title" content="furrestfire // node 01">
-<meta property="og:description" content="Writer, reader, gamer. Character-driven fiction and long notes on characters that don't exist.">
+<meta property="og:description" content="The coolest person on this node. Ultimate across the network. Best by a margin nobody has bothered to measure.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://furrestfire.github.io/">
 <link rel="canonical" href="https://furrestfire.github.io/">
@@ -128,12 +128,16 @@
     pointer-events:none; opacity:0; transition:opacity .25s ease, transform .12s ease;
     transform:translate(-50%,-50%);
   }
-  .reticle::before, .reticle::after{
-    content:""; position:absolute; inset:0; border:1px solid var(--accent-dim);
+  .reticle i{
+    position:absolute; width:9px; height:9px; display:block;
+    border:1px solid var(--accent-dim);
   }
-  .reticle::before{clip-path:polygon(0 0,26% 0,26% 1px,1px 1px,1px 26%,0 26%);}
-  .reticle::after{clip-path:polygon(100% 0,100% 26%,calc(100% - 1px) 26%,calc(100% - 1px) 1px,74% 1px,74% 0);}
+  .reticle i:nth-child(1){top:0; left:0; border-right:0; border-bottom:0}
+  .reticle i:nth-child(2){top:0; right:0; border-left:0; border-bottom:0}
+  .reticle i:nth-child(3){bottom:0; left:0; border-right:0; border-top:0}
+  .reticle i:nth-child(4){bottom:0; right:0; border-left:0; border-top:0}
   .reticle.hot{transform:translate(-50%,-50%) scale(1.4); opacity:.95}
+  .reticle.hot i{border-color:var(--accent)}
 
   /* ---- boot ---- */
   .boot{
@@ -509,7 +513,7 @@
 <div class="fx" aria-hidden="true"></div>
 <div class="sweep" aria-hidden="true"></div>
 <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-<div class="reticle" id="reticle" aria-hidden="true"></div>
+<div class="reticle" id="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <div class="hud hud-top" aria-hidden="true">
   <span class="seg"><span class="led"></span><span class="v">NODE 01</span></span>
@@ -549,7 +553,7 @@
       <circle cx="200" cy="200" r="118" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 7"/>
     </svg>
 
-    <p class="kicker">PERSONAL NODE <span>//</span> STATIC HTML <span>//</span> NO TRACKERS</p>
+    <p class="kicker">NODE 01 <span>//</span> COOLEST ON RECORD <span>//</span> ULTIMATE BEST</p>
     <h1>FurrestFire</h1>
 
     <div class="mark" id="mark" aria-hidden="true">
@@ -560,12 +564,12 @@
 █     █████ █  ██ █  ██ █████ ████  █     █████ █  ██ █████</pre>
     </div>
 
-    <p class="tagline" id="tagline">Writer, reader, gamer. Small things, long notes on characters that don't exist.<span class="cursor" aria-hidden="true"></span></p>
+    <p class="tagline" id="tagline">The coolest person on this node. Also the ultimate best. Those two facts are not unrelated.<span class="cursor" aria-hidden="true"></span></p>
 
     <div class="strip">
-      <span>ACCESS <b>GRANTED</b></span>
-      <span>HOST <b>github pages</b></span>
-      <span>SCRIPTS <b>0 external</b></span>
+      <span>RANK <b>coolest</b></span>
+      <span>TIER <b>ultimate</b></span>
+      <span>VERDICT <b>best</b></span>
       <span>THEME <b id="strip-theme">green</b></span>
     </div>
 
@@ -580,22 +584,22 @@
 
   <div class="ticker" aria-hidden="true">
     <div class="ticker-track">
-      <span>node 01 <b>//</b> furrestfire</span>
-      <span>static html <b>//</b> zero external requests</span>
-      <span>writer <b>//</b> reader <b>//</b> gamer</span>
-      <span>scp:rp <b>//</b> sarkic</span>
-      <span>glyph rain <b>//</b> carrier 1420.405</span>
-      <span>access granted <b>//</b> clearance 01</span>
-      <span>no analytics <b>//</b> no fonts to fetch</span>
-      <span>tty1 <b>//</b> github pages</span>
-      <span>node 01 <b>//</b> furrestfire</span>
-      <span>static html <b>//</b> zero external requests</span>
-      <span>writer <b>//</b> reader <b>//</b> gamer</span>
-      <span>scp:rp <b>//</b> sarkic</span>
-      <span>glyph rain <b>//</b> carrier 1420.405</span>
-      <span>access granted <b>//</b> clearance 01</span>
-      <span>no analytics <b>//</b> no fonts to fetch</span>
-      <span>tty1 <b>//</b> github pages</span>
+      <span>the coolest <b>//</b> furrestfire</span>
+      <span>ultimate <b>//</b> best <b>//</b> no challengers</span>
+      <span>ranked 01 <b>//</b> margin: not close</span>
+      <span>clearance ∞ <b>//</b> access granted</span>
+      <span>zero trackers <b>//</b> zero notes needed</span>
+      <span>node 01 <b>//</b> signature confirmed</span>
+      <span>built different <b>//</b> verified</span>
+      <span>still the best <b>//</b> obviously</span>
+      <span>the coolest <b>//</b> furrestfire</span>
+      <span>ultimate <b>//</b> best <b>//</b> no challengers</span>
+      <span>ranked 01 <b>//</b> margin: not close</span>
+      <span>clearance ∞ <b>//</b> access granted</span>
+      <span>zero trackers <b>//</b> zero notes needed</span>
+      <span>node 01 <b>//</b> signature confirmed</span>
+      <span>built different <b>//</b> verified</span>
+      <span>still the best <b>//</b> obviously</span>
     </div>
   </div>
 
@@ -608,7 +612,7 @@
       </div>
       <div class="shell-body" id="out" role="log" aria-live="polite" aria-label="terminal output">
         <p class="ln dim">Last login: Sun Nov 15 04:20:11 on ttys000</p>
-        <p class="ln">furrestfire.github.io — one static file. nothing loaded from anywhere else.</p>
+        <p class="ln">furrestfire.github.io — the coolest page you'll load today. one static file, nothing loaded from anywhere else.</p>
         <p class="ln dim">type <span style="color:var(--accent)">help</span> for commands, <span style="color:var(--accent)">links</span> for the shortlist, or click a chip below.</p>
       </div>
       <div class="chips">
@@ -631,22 +635,22 @@
   <section id="file" class="reveal">
     <span class="ghost" aria-hidden="true">01</span>
     <div class="sec-head">
-      <span class="sec-num">01</span><h2 data-scramble="file // identity">file // identity</h2>
-      <span class="status">status <b>active</b></span>
+      <span class="sec-num">01</span><h2 data-scramble="file // the record">file // the record</h2>
+      <span class="status">status <b>verified</b></span>
     </div>
     <div class="dossier">
       <dl class="fields">
         <div><dt>handle</dt><dd>FurrestFire</dd></div>
-        <div><dt>occupation</dt><dd>Writer, reader, gamer</dd></div>
-        <div><dt>writing</dt><dd>Character-driven fiction — long profiles, half-finished scenes, the occasional short story</dd></div>
-        <div><dt>corner of things</dt><dd>SCP:RP / Sarkic</dd></div>
-        <div><dt>also</dt><dd>Quietly rebuilding my own desktop so it runs faster and stays out of my way</dd></div>
-        <div><dt>clearance</dt><dd><span class="redact">██████</span> — level 01</dd></div>
+        <div><dt>rank</dt><dd>Coolest — uncontested</dd></div>
+        <div><dt>tier</dt><dd>Ultimate</dd></div>
+        <div><dt>verdict</dt><dd>Best. By a margin nobody has measured.</dd></div>
+        <div><dt>competition</dt><dd>None filed.</dd></div>
+        <div><dt>clearance</dt><dd><span class="redact">██████</span> — level ∞</dd></div>
       </dl>
-      <div class="stamp"><span>active</span></div>
+      <div class="stamp"><span>best</span></div>
     </div>
-    <p>I write character-driven fiction — long profiles, half-finished scenes, the occasional short story — mostly in the SCP:RP / Sarkic corner of things. When I'm not writing, I'm in a game, or rebuilding my desktop so it runs faster and stays out of my way.</p>
-    <p class="dim">This page is one static HTML file. No third-party scripts, no trackers, no analytics, no fonts to fetch.</p>
+    <p>There is a short list of people who are the coolest. There is a shorter list of people who are the ultimate best. There is exactly one name on both, and you're reading their page.</p>
+    <p class="dim">Everything else here is atmosphere. The atmosphere is also correct.</p>
   </section>
 
   <section id="uplink" class="reveal">
@@ -693,7 +697,7 @@
     <div class="signal-grid">
       <div class="signal-main">
         <canvas id="wave" width="640" height="70" aria-label="simulated signal trace"></canvas>
-        <p class="cap">carrier 1420.405 mhz — decorative</p>
+        <p class="cap">carrier 1420.405 mhz — signature confirmed</p>
       </div>
       <div class="bars">
         <div class="t-row"><span>cpu</span><span class="bar"><i id="bar-cpu" style="width:12%"></i></span><span class="val" id="val-cpu">12%</span></div>
@@ -711,14 +715,14 @@
       <span class="status">3 <b>entries</b></span>
     </div>
     <ul class="log">
-      <li><time>2026-11-15</time>node rebuilt — boot sequence, glyph rain, palettes, HUD. still one file, still zero requests.</li>
-      <li><time>2026-11-14</time>first deploy on github pages. about + links, plain html.</li>
-      <li><time>2026-10</time><span class="tagx">//</span> desktop stripped lean: fewer startup apps, less bundleware, more frames.</li>
+      <li><time>2026-11-15</time>node goes live. internet average quality rises immediately.</li>
+      <li><time>2026-11-15</time>clearance raised to ∞, retroactively.</li>
+      <li><time>ongoing</time><span class="tagx">//</span> remains the coolest. no challengers filed.</li>
     </ul>
   </section>
 
   <footer>
-    <span>© 2026 furrestfire</span>
+    <span>© 2026 furrestfire — coolest / ultimate / best</span>
     <span>node 01 // <a href="https://github.com/furrestfire/furrestfire.github.io">github pages</a></span>
   </footer>
 
@@ -858,6 +862,7 @@
   var bootLines = [
     "FURRESFIRE BIOS v3.0 — static node, no POST required",
     "memory check ............ <b>640K OK</b> (all of it)",
+    "subject ................. <b>coolest</b> (verified)",
     "mounting /dev/null ...... <b>done</b>",
     "loading glyph engine .... <b>ok</b>",
     "calibrating phosphor .... <b>ok</b>",
@@ -954,9 +959,9 @@
     {name:"Writing", note:"a blog, AO3, or doc", url:null}
   ];
   var FILES = {
-    "about.txt":"writer, reader, gamer. character-driven fiction, mostly SCP:RP / Sarkic. games with a story worth following.",
-    "links.txt":"github.com/furrestfire — discord, steam, writing: pending.",
-    "readme.md":"static html. one file. no third-party scripts, no trackers, no external fonts. edit index.html and push."
+    "about.txt":"coolest, ultimate, best. that is the whole file.",
+    "links.txt":"github.com/furrestfire — discord, steam, writing: channels idle.",
+    "readme.md":"static html. one file. zero external requests. built for the coolest. edit index.html and push."
   };
   var MAN = {
     help:"list commands", about:"who this is", links:"the shortlist", open:"open link n in a new tab",
@@ -993,10 +998,10 @@
   }
 
   function about(){
-    line("FurrestFire — writer, reader, gamer.", "ok");
-    line("Character-driven fiction: long profiles, half-finished scenes, the occasional short story.");
-    line("Mostly the SCP:RP / Sarkic corner of things. Otherwise: games with a story worth following,", "dim");
-    line("and a desktop kept lean enough to stay out of the way.", "dim");
+    line("FurrestFire — the coolest.", "ok");
+    line("Ultimate tier. Best on record. Margin: not close.");
+    line("There is exactly one name on both lists, and it is this one.", "dim");
+    line("Everything else on this node is atmosphere, and the atmosphere agrees.", "dim");
   }
 
   function links(){
@@ -1023,9 +1028,9 @@
   }
 
   function neofetch(){
-    [["handle","furrestfire"],["role","writer / reader / gamer"],["node","static html, 1 file"],
-     ["scripts","0 external"],["trackers","0"],["theme",THEMES[themeName].label],
-     ["rain",rainOn ? "on" : "off"],["host","github pages"],
+    [["handle","furrestfire"],["rank","01 — uncontested"],["role","coolest / ultimate / best"],
+     ["node","static html, 1 file"],["scripts","0 external"],["trackers","0"],
+     ["theme",THEMES[themeName].label],["rain",rainOn ? "on" : "off"],["host","github pages"],
      ["uptime",Math.floor((Date.now()-bootTs)/1000) + "s"]
     ].forEach(function(r){
       var p = raw();
@@ -1126,7 +1131,7 @@
         else if(!LINKS[n-1].url) line(LINKS[n-1].name + ": channel idle", "err");
         else { line("opening " + LINKS[n-1].name + " …", "ok"); window.open(LINKS[n-1].url, "_blank", "noopener"); }
         break;
-      case "whoami": line("furrestfire", "ok"); break;
+      case "whoami": line("furrestfire — coolest, ultimate, best", "ok"); break;
       case "ls": line("about.txt   links.txt   readme.md", "ok"); break;
       case "cat":
         if(!arg) line("usage: cat <file>", "err");
@@ -1151,8 +1156,8 @@
         line("redaction bars toggled.", "ok");
         break;
       case "access":
-        line("ACCESS GRANTED — level 01", "ok");
-        line("█".repeat(12) + " " + "cleared for: about, links, log", "dim");
+        line("ACCESS GRANTED — level ∞", "ok");
+        line("█".repeat(12) + " " + "cleared for: everything", "dim");
         break;
       case "signal": drawWave(true); line("carrier trace redrawn.", "ok"); break;
       case "man":

@@ -1,3 +1,6 @@
 *.png
-dom*.html
-test.html
+dom-*.html
+test*.html
+index-reticle.html
+index-flat.html
+mini.html

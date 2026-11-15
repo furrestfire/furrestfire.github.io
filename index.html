@@ -397,6 +397,74 @@
     100%{transform:scale(1,1); filter:brightness(1)}
   }
 
+  /* ---- aura layer ---- */
+  #dust{position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.8}
+  .spot{
+    position:fixed; left:0; top:0; width:820px; height:820px;
+    margin:-410px 0 0 -410px; z-index:3; pointer-events:none;
+    background:radial-gradient(circle, rgba(143,174,155,.14), rgba(143,174,155,.05) 40%, transparent 68%);
+    opacity:0; transition:opacity .7s ease; will-change:transform;
+  }
+  .spot::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 66%);
+    mix-blend-mode:screen;
+  }
+
+  .hero-full{
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    position:relative;
+    padding:64px 0 84px;
+    text-align:center;
+  }
+  .hero-full .kicker{margin-bottom:26px}
+  .hero-full .mark{width:100%; border-top:0; margin:0 0 24px; will-change:transform}
+  .hero-full .tagline{margin:0 auto 20px}
+  .hero-full .strip{width:100%; margin:0 0 24px}
+  .hero-full .cta{justify-content:center}
+  .ring{
+    position:absolute; top:50%; left:50%;
+    width:min(82vw,640px); height:min(82vw,640px);
+    transform:translate(-50%,-50%);
+    opacity:.5; pointer-events:none; z-index:-1;
+  }
+  .ring circle{fill:none}
+  .ring .spin{transform-origin:center; transform-box:fill-box; animation:spin 120s linear infinite}
+  .ring .spin-rev{transform-origin:center; transform-box:fill-box; animation:spin 80s linear infinite reverse}
+  @keyframes spin{from{transform:rotate(0)} to{transform:rotate(360deg)}}
+  .scroll-hint{
+    position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+    font-size:9px; letter-spacing:.34em; text-transform:uppercase; color:var(--line-strong);
+    animation:hint 2.8s ease-in-out infinite;
+  }
+  @keyframes hint{0%,100%{opacity:.35} 50%{opacity:1}}
+
+  .ghost{
+    position:absolute; right:0; top:-14px;
+    font-size:clamp(84px,15vw,190px); line-height:.78; letter-spacing:-.05em;
+    color:transparent; -webkit-text-stroke:1px var(--line-strong);
+    opacity:.6; pointer-events:none; user-select:none;
+  }
+  section{position:relative}
+
+  .ticker{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--panel); overflow:hidden; margin:0 0 40px;
+  }
+  .ticker-track{
+    display:flex; width:max-content;
+    padding:9px 0;
+    font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:var(--dim);
+    animation:ticker 40s linear infinite;
+  }
+  .ticker-track span{padding:0 20px; white-space:nowrap}
+  .ticker-track b{color:var(--accent); font-weight:400}
+  @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .9s ease, transform .9s ease}
+  .reveal.in{opacity:1; transform:none}
+
   @media (max-width:700px){
     body{padding:46px 14px 50px; font-size:13.5px}
     .hud{font-size:9px; letter-spacing:.12em; gap:8px; padding:0 8px}
@@ -429,9 +497,15 @@
     70%{text-shadow:2px 0 0 var(--split-a), -2px 0 0 var(--split-b)}
   }
 </style>
+<noscript><style>
+  .reveal{opacity:1; transform:none}
+  .ticker-track{animation:none}
+</style></noscript>
 </head>
 <body>
 <canvas id="rain" aria-hidden="true"></canvas>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="spot" id="spot" aria-hidden="true"></div>
 <div class="fx" aria-hidden="true"></div>
 <div class="sweep" aria-hidden="true"></div>
 <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -466,7 +540,15 @@
 
 <main class="wrap">
 
-  <header class="hero">
+  <section class="hero-full" id="top">
+    <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+      <circle cx="200" cy="200" r="196" stroke="var(--line-strong)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="182" stroke="var(--accent-dim)" stroke-width="1" stroke-dasharray="1 9" class="spin"/>
+      <circle cx="200" cy="200" r="152" stroke="var(--line)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="152" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="140 815" class="spin-rev" opacity=".75"/>
+      <circle cx="200" cy="200" r="118" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 7"/>
+    </svg>
+
     <p class="kicker">PERSONAL NODE <span>//</span> STATIC HTML <span>//</span> NO TRACKERS</p>
     <h1>FurrestFire</h1>
 
@@ -492,7 +574,30 @@
       <button class="btn" data-cmd="theme next">cycle palette</button>
       <button class="btn" data-cmd="neofetch">neofetch</button>
     </div>
-  </header>
+
+    <div class="scroll-hint">scroll — console ▾</div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>node 01 <b>//</b> furrestfire</span>
+      <span>static html <b>//</b> zero external requests</span>
+      <span>writer <b>//</b> reader <b>//</b> gamer</span>
+      <span>scp:rp <b>//</b> sarkic</span>
+      <span>glyph rain <b>//</b> carrier 1420.405</span>
+      <span>access granted <b>//</b> clearance 01</span>
+      <span>no analytics <b>//</b> no fonts to fetch</span>
+      <span>tty1 <b>//</b> github pages</span>
+      <span>node 01 <b>//</b> furrestfire</span>
+      <span>static html <b>//</b> zero external requests</span>
+      <span>writer <b>//</b> reader <b>//</b> gamer</span>
+      <span>scp:rp <b>//</b> sarkic</span>
+      <span>glyph rain <b>//</b> carrier 1420.405</span>
+      <span>access granted <b>//</b> clearance 01</span>
+      <span>no analytics <b>//</b> no fonts to fetch</span>
+      <span>tty1 <b>//</b> github pages</span>
+    </div>
+  </div>
 
   <section id="console">
     <div class="panel">
@@ -523,7 +628,8 @@
     </div>
   </section>
 
-  <section id="file">
+  <section id="file" class="reveal">
+    <span class="ghost" aria-hidden="true">01</span>
     <div class="sec-head">
       <span class="sec-num">01</span><h2 data-scramble="file // identity">file // identity</h2>
       <span class="status">status <b>active</b></span>
@@ -543,7 +649,8 @@
     <p class="dim">This page is one static HTML file. No third-party scripts, no trackers, no analytics, no fonts to fetch.</p>
   </section>
 
-  <section id="uplink">
+  <section id="uplink" class="reveal">
+    <span class="ghost" aria-hidden="true">02</span>
     <div class="sec-head">
       <span class="sec-num">02</span><h2 data-scramble="uplink // channels">uplink // channels</h2>
       <span class="status">4 <b>channels</b></span>
@@ -577,7 +684,8 @@
     <p class="dim" style="margin-top:12px;font-size:12px">Grey LEDs are empty placeholders — send me the URL and I'll wire them in, or edit <code style="color:var(--accent-dim)">index.html</code> yourself.</p>
   </section>
 
-  <section id="signal">
+  <section id="signal" class="reveal">
+    <span class="ghost" aria-hidden="true">03</span>
     <div class="sec-head">
       <span class="sec-num">03</span><h2 data-scramble="signal // telemetry">signal // telemetry</h2>
       <span class="status">simulated <b>feed</b></span>
@@ -596,7 +704,8 @@
     </div>
   </section>
 
-  <section id="log">
+  <section id="log" class="reveal">
+    <span class="ghost" aria-hidden="true">04</span>
     <div class="sec-head">
       <span class="sec-num">04</span><h2 data-scramble="log // transmissions">log // transmissions</h2>
       <span class="status">3 <b>entries</b></span>
@@ -766,6 +875,7 @@
     setTimeout(function(){ boot.style.display = "none"; }, 550);
     startHero();
     rainStart();
+    dustStart();
   }
 
   function runBoot(){
@@ -1205,6 +1315,129 @@
       });
     }, {threshold:.6});
     document.querySelectorAll("[data-scramble]").forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- dust motes ---------- */
+  var dust = document.getElementById("dust");
+  var dustCtx = null, motes = [], dustRaf = 0, lastDust = 0;
+
+  function dustSize(){
+    if(!dustCtx) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dust.width = Math.floor(window.innerWidth * dpr);
+    dust.height = Math.floor(window.innerHeight * dpr);
+    dust.style.width = window.innerWidth + "px";
+    dust.style.height = window.innerHeight + "px";
+    dustCtx.setTransform(dpr,0,0,dpr,0,0);
+    var n = window.innerWidth < 700 ? 24 : 60;
+    motes = [];
+    for(var i=0;i<n;i++){
+      motes.push({
+        x: Math.random()*window.innerWidth,
+        y: Math.random()*window.innerHeight,
+        r: 0.6 + Math.random()*1.7,
+        vy: -(0.12 + Math.random()*0.32),
+        vx: (Math.random()-0.5)*0.16,
+        a: 0.14 + Math.random()*0.42,
+        p: Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  function dustFrame(t){
+    dustRaf = requestAnimationFrame(dustFrame);
+    if(t - lastDust < 40) return;
+    lastDust = t;
+    if(document.hidden || !dustCtx) return;
+    var w = window.innerWidth, h = window.innerHeight;
+    dustCtx.clearRect(0,0,w,h);
+    dustCtx.fillStyle = getComputedStyle(root).getPropertyValue("--accent").trim() || "#8fae9b";
+    for(var i=0;i<motes.length;i++){
+      var m = motes[i];
+      m.p += 0.012;
+      m.x += m.vx + Math.sin(m.p)*0.16;
+      m.y += m.vy;
+      if(m.y < -10){ m.y = h + 10; m.x = Math.random()*w; }
+      if(m.x < -10) m.x = w + 10;
+      if(m.x > w + 10) m.x = -10;
+      dustCtx.globalAlpha = m.a;
+      dustCtx.beginPath();
+      dustCtx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+      dustCtx.fill();
+    }
+    dustCtx.globalAlpha = 1;
+  }
+
+  function dustStart(){
+    if(dustCtx) return;
+    var c = dust.getContext("2d", {alpha:true});
+    if(!c) return;
+    dustCtx = c;
+    dustSize();
+    window.addEventListener("resize", dustSize, {passive:true});
+    dustRaf = requestAnimationFrame(dustFrame);
+  }
+
+  /* ---------- spotlight ---------- */
+  var spot = document.getElementById("spot");
+  (function(){
+    var sx = -700, sy = -700, stx = -700, sty = -700, lit = false;
+    window.addEventListener("mousemove", function(e){
+      stx = e.clientX; sty = e.clientY;
+      if(!lit){ lit = true; spot.style.opacity = "1"; }
+    }, {passive:true});
+    (function spotLoop(){
+      sx += (stx-sx) * 0.07;
+      sy += (sty-sy) * 0.07;
+      spot.style.transform = "translate(" + sx.toFixed(1) + "px," + sy.toFixed(1) + "px)";
+      requestAnimationFrame(spotLoop);
+    })();
+  })();
+
+  /* ---------- parallax ---------- */
+  var markEl = document.getElementById("mark");
+  var ringEl = document.querySelector(".ring");
+  var lastPy = -1;
+  (function parallax(){
+    var y = window.scrollY || window.pageYOffset || 0;
+    if(Math.abs(y - lastPy) > 1){
+      lastPy = y;
+      if(markEl) markEl.style.transform = "translateY(" + (y * -0.10).toFixed(1) + "px)";
+      if(ringEl) ringEl.style.transform = "translate(-50%,-50%) translateY(" + (y * -0.045).toFixed(1) + "px)";
+    }
+    requestAnimationFrame(parallax);
+  })();
+
+  /* ---------- reveal on scroll ---------- */
+  var pending = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+  function checkReveal(){
+    if(!pending.length) return;
+    var vh = window.innerHeight;
+    pending = pending.filter(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top < vh - 60 && r.bottom > 0){ el.classList.add("in"); return false; }
+      return true;
+    });
+  }
+  var revealPending = false;
+  window.addEventListener("scroll", function(){
+    if(revealPending) return;
+    revealPending = true;
+    setTimeout(function(){ revealPending = false; checkReveal(); }, 120);
+  }, {passive:true});
+  window.addEventListener("resize", checkReveal, {passive:true});
+  setTimeout(checkReveal, 700);
+  var revealTick = setInterval(function(){
+    checkReveal();
+    if(!pending.length) clearInterval(revealTick);
+  }, 700);
+  if("IntersectionObserver" in window){
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); ro.unobserve(en.target); }
+      });
+    }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+    document.querySelectorAll(".reveal").forEach(function(el){ ro.observe(el); });
   }
 
   /* ---------- reticle ---------- */

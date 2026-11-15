@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="green">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,16 +26,35 @@
     --accent:#8fae9b;
     --accent-dim:#5d7a69;
     --warn:#b7a97e;
+    --glow:rgba(143,174,155,.07);
+    --split-a:rgba(183,169,126,.55);
+    --split-b:rgba(143,174,155,.55);
     --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","JetBrains Mono",Consolas,"Courier New",monospace;
+  }
+  html[data-theme="amber"]{
+    --bg:#100e0a; --panel:#14110c; --panel-2:#191510; --line:#221d14; --line-strong:#3a3122;
+    --fg:#d9cfb6; --fg-soft:#bcb098; --dim:#7c705a;
+    --accent:#c8a86a; --accent-dim:#8a7443; --warn:#c98f5e;
+    --glow:rgba(200,168,106,.07); --split-a:rgba(200,140,90,.55); --split-b:rgba(200,168,106,.55);
+  }
+  html[data-theme="ice"]{
+    --bg:#0a0f12; --panel:#0e151a; --panel-2:#121b21; --line:#1a242b; --line-strong:#2b3a44;
+    --fg:#c3d3da; --fg-soft:#a3b6be; --dim:#6a7c85;
+    --accent:#8fb6c9; --accent-dim:#5b7f92; --warn:#b7a97e;
+    --glow:rgba(143,182,201,.07); --split-a:rgba(120,160,200,.55); --split-b:rgba(143,182,201,.55);
+  }
+  html[data-theme="blood"]{
+    --bg:#100b0b; --panel:#150e0e; --panel-2:#1a1111; --line:#241818; --line-strong:#3a2424;
+    --fg:#d3c4c4; --fg-soft:#b5a4a4; --dim:#7a6464;
+    --accent:#b98a8a; --accent-dim:#8a5f5f; --warn:#c9a06a;
+    --glow:rgba(185,138,138,.07); --split-a:rgba(200,120,120,.55); --split-b:rgba(185,138,138,.55);
   }
 
   *{box-sizing:border-box; border-radius:0}
   html{scroll-behavior:smooth}
   body{
     margin:0;
-    background:
-      radial-gradient(120% 80% at 50% -10%, rgba(143,174,155,.07), transparent 60%),
-      var(--bg);
+    background:var(--bg);
     color:var(--fg);
     font-family:var(--mono);
     font-size:14px;
@@ -43,24 +62,53 @@
     -webkit-font-smoothing:antialiased;
     padding:0 20px 64px;
     min-height:100vh;
+    overflow-x:hidden;
   }
   ::selection{background:var(--accent); color:var(--bg)}
 
   a{color:var(--accent); text-decoration:none}
+
+  /* ---- glyph rain ---- */
+  #rain{
+    position:fixed; inset:0; z-index:1;
+    pointer-events:none;
+    opacity:.62;
+    transition:opacity .6s ease;
+  }
+  #rain.off{opacity:0}
 
   /* ---- screen texture ---- */
   .fx{position:fixed; inset:0; pointer-events:none; z-index:9}
   .fx::before{
     content:""; position:absolute; inset:0;
     background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
-    opacity:.55;
+    opacity:.42;
   }
   .fx::after{
     content:""; position:absolute; inset:0;
-    background:radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(0,0,0,.45) 100%);
+    background:radial-gradient(120% 100% at 50% 40%, transparent 65%, rgba(0,0,0,.34) 100%);
   }
 
   .wrap{max-width:880px; margin:0 auto; position:relative; z-index:10}
+
+  /* ---- boot overlay ---- */
+  .boot{
+    position:fixed; inset:0; z-index:50;
+    background:var(--bg);
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 28px;
+    font-size:12.5px; line-height:1.75;
+    color:var(--dim);
+    transition:opacity .55s ease;
+  }
+  .boot.out{opacity:0; pointer-events:none}
+  .boot .inner{width:100%; max-width:520px; margin:0 auto}
+  .boot pre{margin:0 0 18px; white-space:pre-wrap; color:var(--accent-dim); min-height:11.5em}
+  .boot pre b{color:var(--accent); font-weight:400}
+  .boot pre i{color:var(--warn); font-style:normal}
+  .boot-bar{height:2px; background:var(--line); margin:0 0 10px; overflow:hidden}
+  .boot-bar i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s linear}
+  .boot-hint{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--line-strong); margin:0}
 
   /* ---- top bar ---- */
   .topbar{
@@ -68,6 +116,7 @@
     display:flex; align-items:center; justify-content:space-between; gap:16px;
     border-bottom:1px solid var(--line);
     background:rgba(13,17,15,.86);
+    background:color-mix(in srgb, var(--bg) 86%, transparent);
     backdrop-filter:blur(6px);
     padding:12px 0 11px;
     margin-bottom:44px;
@@ -87,7 +136,7 @@
   .nav a:hover{color:var(--accent); border-bottom-color:var(--line-strong)}
 
   /* ---- hero ---- */
-  .hero{margin-bottom:56px}
+  .hero{margin-bottom:52px}
   .eyebrow{
     font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent-dim);
     margin:0 0 18px;
@@ -101,14 +150,23 @@
     border-bottom:1px solid var(--line);
     overflow-x:auto;
     scrollbar-width:none;
+    cursor:default;
   }
   .banner pre{
     margin:0;
     font-size:clamp(5.4px,1.62vw,12px);
     line-height:1.05;
     color:var(--accent);
-    text-shadow:0 0 12px rgba(143,174,155,.18);
+    text-shadow:0 0 14px var(--glow);
     white-space:pre;
+  }
+  .banner.glitch pre{animation:glitch .42s steps(2,end) 1}
+  @keyframes glitch{
+    0%{transform:translate(0,0); text-shadow:0 0 14px var(--glow)}
+    15%{transform:translate(-3px,1px); text-shadow:-3px 0 0 var(--split-a), 3px 0 0 var(--split-b)}
+    35%{transform:translate(2px,-1px); text-shadow:3px 0 0 var(--split-a), -3px 0 0 var(--split-b)}
+    55%{transform:translate(-1px,0); text-shadow:-1px 0 0 var(--split-b), 1px 0 0 var(--split-a)}
+    100%{transform:translate(0,0); text-shadow:0 0 14px var(--glow)}
   }
 
   h1{position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%)}
@@ -136,8 +194,9 @@
   .shell{
     border:1px solid var(--line-strong);
     background:var(--panel);
+    background:color-mix(in srgb, var(--panel) 94%, transparent);
     box-shadow:0 24px 60px -30px rgba(0,0,0,.9);
-    margin-bottom:56px;
+    margin-bottom:18px;
   }
   .shell-bar{
     display:flex; align-items:center; gap:12px;
@@ -174,6 +233,7 @@
   .ln a:hover{border-bottom-color:var(--accent)}
   .ln .k{color:var(--accent); display:inline-block; min-width:9ch}
   .ln .v{color:var(--fg)}
+  .ln .swatch{display:inline-block; width:9px; height:9px; vertical-align:-1px; margin-right:6px; border:1px solid var(--line-strong)}
 
   .shell-input{
     display:flex; align-items:center; gap:8px;
@@ -193,6 +253,24 @@
     padding:0;
   }
   .shell-input input::placeholder{color:var(--line-strong)}
+
+  /* ---- telemetry ---- */
+  .telemetry{
+    border:1px solid var(--line);
+    background:var(--panel);
+    margin:0 0 56px;
+    padding:10px 14px 12px;
+  }
+  .telemetry .cap{
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--line-strong); margin:0 0 8px;
+  }
+  .t-row{display:flex; align-items:center; gap:10px; font-size:11px; color:var(--dim); margin-bottom:5px}
+  .t-row:last-child{margin-bottom:0}
+  .t-row .lbl{width:6ch; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-dim)}
+  .t-row .bar{flex:1; height:3px; background:var(--line); position:relative; overflow:hidden}
+  .t-row .bar i{position:absolute; inset:0 auto 0 0; background:var(--accent); transition:width .9s ease}
+  .t-row .val{width:4ch; text-align:right; color:var(--fg-soft)}
 
   /* ---- sections ---- */
   section{margin-bottom:56px}
@@ -266,6 +344,22 @@
     transform:translate(-100px,-100px);
   }
 
+  /* ---- CRT power cycle ---- */
+  .crt-off .wrap, .crt-off .fx{animation:crtOff .34s ease-in forwards}
+  .crt-on .wrap, .crt-on .fx{animation:crtOn .55s ease-out}
+  .crt-flash .fx{animation:crtFlash .42s ease}
+  @keyframes crtFlash{0%,100%{opacity:1} 45%{opacity:.45}}
+  @keyframes crtOff{
+    0%{transform:scale(1,1); filter:brightness(1)}
+    55%{transform:scale(1.02,.55); filter:brightness(2.2)}
+    100%{transform:scale(.006,.006); filter:brightness(4)}
+  }
+  @keyframes crtOn{
+    0%{transform:scale(.006,.006); filter:brightness(4)}
+    45%{transform:scale(1.02,.6); filter:brightness(2)}
+    100%{transform:scale(1,1); filter:brightness(1)}
+  }
+
   :focus-visible{outline:1px solid var(--accent); outline-offset:3px}
 
   @media (max-width:640px){
@@ -281,17 +375,35 @@
     .dossier dt{width:auto; padding-top:0}
     .link{grid-template-columns:22px 1fr auto; gap:10px; padding:13px 12px}
     .link .host{display:none}
+    .boot{padding:0 18px; font-size:11.5px}
+    .boot pre{min-height:9em}
   }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
-    .cursor,.dot{animation:none}
+    .dot{animation:none}
     .link,.link .go{transition:none}
     .fx::before{opacity:.3}
+    /* Keep the glitch, drop the shake: a static chromatic split instead. */
+    .banner.glitch pre{animation:glitchSoft .42s ease 1}
+  }
+  @keyframes glitchSoft{
+    0%,100%{text-shadow:0 0 14px var(--glow)}
+    30%{text-shadow:-2px 0 0 var(--split-a), 2px 0 0 var(--split-b)}
+    70%{text-shadow:2px 0 0 var(--split-a), -2px 0 0 var(--split-b)}
   }
 </style>
 </head>
 <body>
+<canvas id="rain" aria-hidden="true"></canvas>
 <div class="fx" aria-hidden="true"></div>
+
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="inner">
+    <pre id="bootlog"></pre>
+    <div class="boot-bar"><i id="bootbar"></i></div>
+    <p class="boot-hint">press any key to skip</p>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -305,7 +417,7 @@
     <p class="eyebrow">personal site <b>/</b> static html <b>/</b> no trackers</p>
     <h1>FurrestFire</h1>
 
-    <div class="banner" aria-hidden="true">
+    <div class="banner" id="banner" aria-hidden="true">
 <pre>█████ █   █ ████  ████  █████  ████ █████ █████ ████  █████
 █     █   █ █   █ █   █ █     █     █       █   █   █ █    
 ████  █   █ ████  ████  ████   ███  ████    █   ████  ████ 
@@ -332,6 +444,13 @@
       <label class="pr" for="cmd"><b>furrestfire@pages</b>:~$</label>
       <input id="cmd" name="cmd" type="text" placeholder="help" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="terminal command">
     </form>
+  </div>
+
+  <div class="telemetry" aria-label="simulated system telemetry">
+    <p class="cap">telemetry — simulated</p>
+    <div class="t-row"><span class="lbl">cpu</span><span class="bar"><i id="bar-cpu" style="width:12%"></i></span><span class="val" id="val-cpu">12%</span></div>
+    <div class="t-row"><span class="lbl">mem</span><span class="bar"><i id="bar-mem" style="width:31%"></i></span><span class="val" id="val-mem">31%</span></div>
+    <div class="t-row"><span class="lbl">net</span><span class="bar"><i id="bar-net" style="width:4%"></i></span><span class="val" id="val-net">4%</span></div>
   </div>
 
   <section id="about">
@@ -396,6 +515,26 @@
   "use strict";
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
+
+  /* ---------- theme ---------- */
+  var THEMES = {
+    green:{label:"phosphor green", accent:"#8fae9b"},
+    amber:{label:"amber terminal", accent:"#c8a86a"},
+    ice:{label:"ice blue", accent:"#8fb6c9"},
+    blood:{label:"oxblood", accent:"#b98a8a"}
+  };
+  function setTheme(name){
+    if(!THEMES[name]) return false;
+    root.setAttribute("data-theme", name);
+    try{ localStorage.setItem("ff-theme", name); }catch(e){}
+    if(rainCtx) rainColor = getComputedStyle(root).getPropertyValue("--accent").trim() || "#8fae9b";
+    return true;
+  }
+  try{
+    var saved = localStorage.getItem("ff-theme");
+    if(saved && THEMES[saved]) root.setAttribute("data-theme", saved);
+  }catch(e){}
 
   /* ---------- clock ---------- */
   var clock = document.getElementById("clock");
@@ -405,16 +544,136 @@
   }
   tick(); setInterval(tick, 15000);
 
+  /* ---------- glyph rain ---------- */
+  var rain = document.getElementById("rain");
+  var rainCtx = null, rainColor = "#8fae9b", rainOn = false, drops = [], cols = 0;
+  var GLYPHS = "アイウエオカキクケコサシスセソタチツテト0123456789<>/\\|[]{}#*+";
+  var rainRaf = 0, lastRain = 0, rainAcc = 0;
+
+  function rainSize(){
+    if(!rainCtx) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    rain.width = Math.floor(window.innerWidth * dpr);
+    rain.height = Math.floor(window.innerHeight * dpr);
+    rain.style.width = window.innerWidth + "px";
+    rain.style.height = window.innerHeight + "px";
+    rainCtx.setTransform(dpr,0,0,dpr,0,0);
+    cols = Math.max(8, Math.floor(window.innerWidth / 18));
+    drops = [];
+    for(var i=0;i<cols;i++) drops.push({y: Math.random() * -40, v: 0.4 + Math.random() * 0.9});
+    rainCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+  }
+
+  function rainFrame(t){
+    rainRaf = requestAnimationFrame(rainFrame);
+    if(t - lastRain < 33) return;
+    lastRain = t;
+    if(document.hidden) return;
+    var w = window.innerWidth, h = window.innerHeight;
+    // Erase instead of painting dark: keeps the page background visible and theme-agnostic.
+    rainCtx.globalCompositeOperation = "destination-out";
+    rainCtx.fillStyle = "rgba(0,0,0,.09)";
+    rainCtx.fillRect(0,0,w,h);
+    rainCtx.globalCompositeOperation = "source-over";
+    rainCtx.font = "13px ui-monospace, monospace";
+    for(var i=0;i<drops.length;i++){
+      var d = drops[i];
+      var ch = GLYPHS.charAt(Math.floor(Math.random()*GLYPHS.length));
+      rainCtx.fillStyle = rainColor;
+      rainCtx.globalAlpha = 0.22 + Math.random()*0.5;
+      rainCtx.fillText(ch, i*18 + 4, d.y * 18);
+      d.y += d.v;
+      if(d.y * 18 > h && Math.random() > 0.975){ d.y = 0; }
+      if(d.y * 18 > h + 40){ d.y = 0; }
+    }
+    rainCtx.globalAlpha = 1;
+  }
+
+  function rainStart(){
+    if(rainOn) return;
+    if(!rainCtx){
+      var c = rain.getContext("2d", {alpha:true});
+      if(!c) return;
+      rainCtx = c;
+      rainColor = getComputedStyle(root).getPropertyValue("--accent").trim() || "#8fae9b";
+      rainSize();
+      window.addEventListener("resize", rainSize, {passive:true});
+    }
+    // Softer rain when the OS asks for reduced motion — the effect stays, it just whispers.
+    rain.style.opacity = reduce ? ".2" : "";
+    rain.classList.remove("off");
+    rainOn = true;
+    rainRaf = requestAnimationFrame(rainFrame);
+  }
+  function rainStop(){
+    rainOn = false;
+    cancelAnimationFrame(rainRaf);
+    rain.classList.add("off");
+  }
+
+  /* ---------- boot ---------- */
+  var boot = document.getElementById("boot");
+  var bootlog = document.getElementById("bootlog");
+  var bootbar = document.getElementById("bootbar");
+  var bootLines = [
+    "FURRESFIRE BIOS v2.6 — static page, no POST required",
+    "memory check ............ <b>640K OK</b> (all of it)",
+    "mounting /dev/null ...... <b>done</b>",
+    "loading glyph engine .... <b>ok</b>",
+    "calibrating phosphor .... <b>ok</b>",
+    "trackers ................ <i>0</i>",
+    "starting shell .......... <b>ready</b>"
+  ];
+  var bootTimer = 0, bootDone = false;
+
+  function endBoot(){
+    if(bootDone) return;
+    bootDone = true;
+    clearTimeout(bootTimer);
+    boot.classList.add("out");
+    setTimeout(function(){ boot.style.display = "none"; }, 600);
+    startHero();
+    rainStart();
+  }
+
+  function runBoot(){
+    boot.style.display = "";
+    boot.classList.remove("out");
+    bootlog.textContent = "";
+    bootbar.style.width = "0%";
+    bootDone = false;
+    var i = 0;
+    (function step(){
+      if(bootDone) return;
+      if(i >= bootLines.length){ endBoot(); return; }
+      var p = document.createElement("div");
+      // bootLines is a hardcoded constant list containing only <b>/<i> tags — safe to inject as HTML.
+      p.innerHTML = "&gt; " + bootLines[i];
+      bootlog.appendChild(p);
+      bootbar.style.width = Math.round(((i+1)/bootLines.length)*100) + "%";
+      i++;
+      bootTimer = setTimeout(step, 190 + Math.random()*160);
+    })();
+    bootTimer = setTimeout(endBoot, 3400);
+  }
+
+  window.addEventListener("keydown", endBoot, {once:true});
+  boot.addEventListener("click", endBoot);
+  runBoot();
+
   /* ---------- typewriter ---------- */
   var tag = document.getElementById("tagline");
   var full = tag.firstChild.nodeValue;
-  if(!reduce){
+  var heroStarted = false;
+  function startHero(){
+    if(heroStarted) return;
+    heroStarted = true;
     tag.firstChild.nodeValue = "";
     var i = 0;
     (function type(){
       if(i >= full.length) return;
       tag.firstChild.nodeValue = full.slice(0, ++i);
-      setTimeout(type, full.charAt(i-1) === "." ? 260 : 26);
+      setTimeout(type, full.charAt(i-1) === "." ? 260 : (reduce ? 9 : 26));
     })();
   }
 
@@ -423,7 +682,7 @@
   var form = document.getElementById("form");
   var input = document.getElementById("cmd");
   var hist = [], hi = 0;
-  var boot = Date.now();
+  var boot_ts = Date.now();
 
   function raw(cls){
     var p = document.createElement("p");
@@ -455,31 +714,63 @@
     {name:"Writing", note:"a blog, AO3, or doc", url:null}
   ];
 
-  var COMMANDS = ["help","about","links","whoami","ls","cat","date","uptime","neofetch","clear","sudo","ping","echo","exit"];
-
   var FILES = {
     "about.txt":"writer, reader, gamer. character-driven fiction, mostly SCP:RP / Sarkic. games with a story worth following.",
     "links.txt":"github.com/furrestfire — discord, steam, writing: pending.",
-    "readme.md":"static html. one file. no trackers, no analytics, no external fonts. edit index.html and push."
+    "readme.md":"static html. one file. no third-party scripts, no trackers, no external fonts. edit index.html and push."
   };
+
+  var MAN = {
+    help:"list commands",
+    about:"who this is",
+    links:"the shortlist",
+    open:"open link n in a new tab",
+    whoami:"current user",
+    ls:"files in ~",
+    cat:"print a file",
+    neofetch:"system + site info",
+    telemetry:"simulated load readout",
+    date:"local time",
+    uptime:"time since page load",
+    history:"recent commands",
+    theme:"switch palette: green, amber, ice, blood",
+    matrix:"toggle glyph rain: on/off",
+    glitch:"shake the banner",
+    banner:"reprint the wordmark",
+    boot:"replay the boot sequence",
+    man:"short description of a command",
+    ping:"pretend network test",
+    echo:"say it back",
+    clear:"wipe the screen",
+    sudo:"nice try",
+    exit:"leave (you can't)"
+  };
+
+  var COMMANDS = Object.keys(MAN);
 
   function help(){
     line("commands:", "dim");
-    line("  help        this list");
-    line("  about       who this is");
-    line("  links       the shortlist");
-    line("  whoami      current user");
-    line("  ls          files in ~");
-    line("  cat <file>  print a file");
-    line("  neofetch    system + site info");
-    line("  date        local time");
-    line("  uptime      time since page load");
-    line("  ping <host> pretend network test");
-    line("  echo <text> say it back");
-    line("  clear       wipe the screen");
-    line("  sudo        nice try");
+    var rows = [
+      ["help","this list"],["about","who this is"],["links","the shortlist"],
+      ["open <n>","open a link"],["whoami","current user"],["ls","files in ~"],
+      ["cat <file>","print a file"],["neofetch","system + site info"],
+      ["telemetry","load readout"],["date","local time"],["uptime","page age"],
+      ["history","recent commands"],["theme <name>","green amber ice blood"],
+      ["matrix on|off","glyph rain"],["glitch","shake the banner"],
+      ["banner","reprint the wordmark"],["boot","replay boot"],
+      ["man <cmd>","describe a command"],["clear","wipe the screen"],
+      ["sudo","nice try"],["ping <host>","pretend ping"],["exit","leave (you can't)"]
+    ];
+    rows.forEach(function(r){
+      var p = raw();
+      var k = document.createElement("span");
+      k.className = "k";
+      k.textContent = "  " + r[0];
+      p.appendChild(k);
+      p.appendChild(document.createTextNode(r[1]));
+    });
     line("");
-    line("tab completes, ↑/↓ for history.", "dim");
+    line("tab completes, ↑/↓ for history, ↑↑↓↓←→←→BA for something.", "dim");
   }
 
   function about(){
@@ -521,9 +812,10 @@
       ["site", "static html, 1 file"],
       ["scripts", "0 external"],
       ["trackers", "0"],
-      ["theme", "dark grey-green"],
+      ["theme", THEMES[root.getAttribute("data-theme")||"green"].label],
+      ["rain", rainOn ? "on" : "off"],
       ["host", "github pages"],
-      ["uptime", Math.floor((Date.now()-boot)/1000) + "s"]
+      ["uptime", Math.floor((Date.now()-boot_ts)/1000) + "s"]
     ];
     line("furrestfire@pages", "ok");
     line("-----------------", "dim");
@@ -540,6 +832,51 @@
     });
   }
 
+  function themeCmd(arg){
+    if(!arg){
+      line("themes:", "dim");
+      Object.keys(THEMES).forEach(function(k){
+        var p = raw();
+        var sw = document.createElement("span");
+        sw.className = "swatch";
+        sw.style.background = THEMES[k].accent;
+        p.appendChild(sw);
+        var s = document.createElement("span");
+        s.style.color = "var(--fg-soft)";
+        s.textContent = k + " — " + THEMES[k].label;
+        p.appendChild(s);
+      });
+      line("usage: theme green|amber|ice|blood", "dim");
+      return;
+    }
+    if(setTheme(arg.toLowerCase())){
+      line("palette → " + THEMES[arg.toLowerCase()].label, "ok");
+    } else {
+      line("no such theme: " + arg + " (green, amber, ice, blood)", "err");
+    }
+  }
+
+  function matrixCmd(arg){
+    var a = (arg||"").toLowerCase();
+    if(a === "on"){ rainStart(); line("glyph rain: on", "ok"); }
+    else if(a === "off"){ rainStop(); line("glyph rain: off", "dim"); }
+    else if(a === "toggle" || a === ""){ rainOn ? (rainStop(), line("glyph rain: off","dim")) : (rainStart(), line("glyph rain: on","ok")); }
+    else line("usage: matrix on|off", "err");
+  }
+
+  function glitchBanner(){
+    var b = document.getElementById("banner");
+    b.classList.remove("glitch");
+    void b.offsetWidth;
+    b.classList.add("glitch");
+    setTimeout(function(){ b.classList.remove("glitch"); }, 460);
+  }
+
+  function printBanner(){
+    var art = document.querySelector(".banner pre").textContent.split("\n");
+    art.forEach(function(r){ line(r, "ok"); });
+  }
+
   function run(rawCmd){
     var cmd = rawCmd.trim();
     if(!cmd) return;
@@ -553,6 +890,12 @@
       case "help": help(); break;
       case "about": about(); break;
       case "links": links(); break;
+      case "open":
+        var n = parseInt(arg, 10);
+        if(!n || n < 1 || n > LINKS.length){ line("usage: open 1-" + LINKS.length, "err"); }
+        else if(!LINKS[n-1].url){ line(LINKS[n-1].name + ": no url yet", "err"); }
+        else { line("opening " + LINKS[n-1].name + " …", "ok"); window.open(LINKS[n-1].url, "_blank", "noopener"); }
+        break;
       case "whoami": line("furrestfire", "ok"); break;
       case "ls": line("about.txt   links.txt   readme.md", "ok"); break;
       case "cat":
@@ -564,8 +907,22 @@
         }
         break;
       case "date": line(new Date().toString()); break;
-      case "uptime": line("up " + Math.floor((Date.now()-boot)/1000) + "s, 1 user, load average: 0.00, 0.00, 0.00"); break;
+      case "uptime": line("up " + Math.floor((Date.now()-boot_ts)/1000) + "s, 1 user, load average: 0.00, 0.00, 0.00"); break;
+      case "history":
+        if(!hist.length) line("(empty)", "dim");
+        hist.forEach(function(h, i){ line("  " + (i+1) + "  " + h); });
+        break;
+      case "theme": themeCmd(arg); break;
+      case "matrix": matrixCmd(arg); break;
+      case "glitch": glitchBanner(); line("glitch.", "ok"); break;
+      case "banner": printBanner(); break;
+      case "boot": runBoot(); break;
+      case "man":
+        if(MAN[arg.toLowerCase()]) line(arg.toLowerCase() + " — " + MAN[arg.toLowerCase()]);
+        else line("man: no entry for " + (arg||"(nothing)"), "err");
+        break;
       case "neofetch": neofetch(); break;
+      case "telemetry": line("simulated: cpu/mem/net readouts on the page — decorative only", "dim"); break;
       case "clear": out.textContent = ""; break;
       case "sudo": line("nice try — you're already root here.", "err"); break;
       case "ping":
@@ -623,10 +980,60 @@
     input.focus();
   });
 
+  /* ---------- telemetry (simulated) ---------- */
+  var bars = {
+    cpu:{el:document.getElementById("bar-cpu"), val:document.getElementById("val-cpu"), v:12},
+    mem:{el:document.getElementById("bar-mem"), val:document.getElementById("val-mem"), v:31},
+    net:{el:document.getElementById("bar-net"), val:document.getElementById("val-net"), v:4}
+  };
+  setInterval(function(){
+    Object.keys(bars).forEach(function(k){
+      var b = bars[k];
+      var drift = (Math.random()-0.5) * (k === "net" ? 18 : 9);
+      b.v = Math.max(2, Math.min(96, b.v + drift));
+      var r = Math.round(b.v);
+      b.el.style.width = r + "%";
+      b.val.textContent = r + "%";
+    });
+  }, 1400);
+
+  /* ---------- konami ---------- */
+  var seq = [], KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+  document.addEventListener("keydown", function(e){
+    seq.push(e.key.length === 1 ? e.key.toLowerCase() : e.key);
+    if(seq.length > 10) seq.shift();
+    if(seq.join(",") === KONAMI.join(",")){
+      seq = [];
+      if(reduce){
+        root.classList.add("crt-flash");
+        setTimeout(function(){ root.classList.remove("crt-flash"); }, 420);
+      } else {
+        root.classList.add("crt-off");
+        setTimeout(function(){
+          root.classList.remove("crt-off");
+          root.classList.add("crt-on");
+          setTimeout(function(){ root.classList.remove("crt-on"); }, 600);
+        }, 360);
+      }
+      line("↑↑↓↓←→←→BA — power cycle.", "ok");
+    }
+  });
+
+  /* ---------- occasional glitch ---------- */
+  (function schedule(){
+    setTimeout(function(){
+      if(!document.hidden) glitchBanner();
+      schedule();
+    }, 6000 + Math.random()*8000);
+  })();
+
   /* ---------- cat ---------- */
   var cat = document.getElementById("cat");
   if(reduce){
-    cat.style.display = "none";
+    // Snap instead of trail — keeps the companion without the perpetual rAF loop.
+    window.addEventListener("mousemove", function(e){
+      cat.style.transform = "translate(" + (e.clientX+14) + "px," + (e.clientY+16) + "px)";
+    }, {passive:true});
   } else {
     var cx = -100, cy = -100, tx = -100, ty = -100;
     window.addEventListener("mousemove", function(e){
@@ -639,6 +1046,9 @@
       requestAnimationFrame(follow);
     })();
   }
+
+  /* debug handle: lets the console (and headless tests) drive the rain directly */
+  window.__ff = { rainStart: rainStart, rainStop: rainStop, rainFrame: rainFrame, setTheme: setTheme, glitch: glitchBanner };
 })();
 </script>
 </body>

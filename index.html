@@ -239,10 +239,23 @@
       </a>
     </div>
 
+    <div class="cat">🐱</div>
+
     <p class="note">Rows with a greyed arrow are empty placeholders — send me the URL and handle and I'll fill them in, or edit <code>index.html</code> yourself.</p>
   </section>
 
-  <footer>
+  <script>
+    const cat = document.querySelector('.cat');
+    window.addEventListener('mousemove', function(e) {
+      const rect = window.getBoundingClientRect();
+      cat.style.transform = `translate(${e.clientX - rect.left}px, ${e.clientY - rect.top}px)`;
+    });
+  </script>
+
+<div class="cat">🐱</div>
+
+</body>
+</html>
     <span>© 2026 furrestfire</span>
     <span>hosted on <a href="https://github.com/furrestfire/furrestfire.github.io">github pages</a></span>
   </footer>

@@ -4,8 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>furrestfire</title>
-<meta name="description" content="FurrestFire — a writer, reader and gamer.">
+<meta name="description" content="FurrestFire — a writer, reader and gamer. Character-driven fiction, SCP:RP, games with a story worth following.">
 <meta name="theme-color" content="#0d110f">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="furrestfire">
+<meta property="og:description" content="Writer, reader, gamer. Character-driven fiction and long notes on characters that don't exist.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://furrestfire.github.io/">
+<link rel="canonical" href="https://furrestfire.github.io/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d110f'/%3E%3Crect x='7' y='9' width='18' height='2' fill='%238fae9b'/%3E%3Crect x='7' y='15' width='11' height='2' fill='%238fae9b'/%3E%3Crect x='7' y='21' width='14' height='2' fill='%236b7a71'/%3E%3C/svg%3E">
 <style>
   :root{
@@ -19,6 +25,7 @@
     --dim:#6b7a71;
     --accent:#8fae9b;
     --accent-dim:#5d7a69;
+    --warn:#b7a97e;
     --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","JetBrains Mono",Consolas,"Courier New",monospace;
   }
 
@@ -27,7 +34,7 @@
   body{
     margin:0;
     background:
-      linear-gradient(180deg, rgba(143,174,155,.04), transparent 220px),
+      radial-gradient(120% 80% at 50% -10%, rgba(143,174,155,.07), transparent 60%),
       var(--bg);
     color:var(--fg);
     font-family:var(--mono);
@@ -35,98 +42,190 @@
     line-height:1.7;
     -webkit-font-smoothing:antialiased;
     padding:0 20px 64px;
+    min-height:100vh;
   }
   ::selection{background:var(--accent); color:var(--bg)}
 
   a{color:var(--accent); text-decoration:none}
 
-  .wrap{max-width:820px; margin:0 auto}
+  /* ---- screen texture ---- */
+  .fx{position:fixed; inset:0; pointer-events:none; z-index:9}
+  .fx::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+    opacity:.55;
+  }
+  .fx::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(0,0,0,.45) 100%);
+  }
+
+  .wrap{max-width:880px; margin:0 auto; position:relative; z-index:10}
 
   /* ---- top bar ---- */
   .topbar{
+    position:sticky; top:0; z-index:20;
     display:flex; align-items:center; justify-content:space-between; gap:16px;
     border-bottom:1px solid var(--line);
-    padding:14px 0 12px;
-    margin-bottom:52px;
+    background:rgba(13,17,15,.86);
+    backdrop-filter:blur(6px);
+    padding:12px 0 11px;
+    margin-bottom:44px;
     font-size:12px;
     letter-spacing:.08em;
     text-transform:uppercase;
     color:var(--dim);
   }
-  .brand{color:var(--fg-soft)}
+  .brand{color:var(--fg-soft); white-space:nowrap}
   .brand .p{color:var(--accent)}
-  .status{display:flex; align-items:center; gap:7px}
+  .status{display:flex; align-items:center; gap:7px; white-space:nowrap}
   .dot{width:7px; height:7px; background:var(--accent); display:inline-block;
        box-shadow:0 0 0 1px rgba(143,174,155,.25); animation:pulse 3.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.35}}
-  .nav{display:flex; gap:18px}
+  .nav{display:flex; gap:18px; white-space:nowrap}
   .nav a{color:var(--dim); border-bottom:1px solid transparent; padding-bottom:2px}
   .nav a:hover{color:var(--accent); border-bottom-color:var(--line-strong)}
 
   /* ---- hero ---- */
-  .hero{margin-bottom:64px}
+  .hero{margin-bottom:56px}
   .eyebrow{
-    font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-dim);
-    margin:0 0 14px;
-  }
-  h1{
-    font-size:clamp(30px,6vw,52px);
-    line-height:1.05;
-    letter-spacing:-.02em;
-    font-weight:500;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent-dim);
     margin:0 0 18px;
-    color:#dfe9e2;
   }
-  h1 .accent{color:var(--accent)}
+  .eyebrow b{color:var(--dim); font-weight:400}
+
+  .banner{
+    margin:0 0 22px;
+    padding:14px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .banner pre{
+    margin:0;
+    font-size:clamp(5.4px,1.62vw,12px);
+    line-height:1.05;
+    color:var(--accent);
+    text-shadow:0 0 12px rgba(143,174,155,.18);
+    white-space:pre;
+  }
+
+  h1{position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%)}
+
   .tagline{
-    font-size:clamp(15px,2.2vw,18px);
+    font-size:clamp(15px,2.1vw,17px);
     color:var(--fg-soft);
-    max-width:56ch;
-    margin:0 0 26px;
-    line-height:1.55;
+    max-width:58ch;
+    margin:0 0 12px;
+    line-height:1.6;
+    min-height:1.6em;
   }
-  .cursor{display:inline-block; width:9px; height:1.05em; background:var(--accent);
-          vertical-align:-.16em; animation:blink 1.15s steps(1) infinite}
+  .tagline .cursor{display:inline-block; width:8px; height:1.05em; background:var(--accent);
+          vertical-align:-.16em; animation:blink 1.15s steps(1) infinite; margin-left:2px}
   @keyframes blink{50%{opacity:0}}
 
-  /* ---- meta strip ---- */
-  .meta{
-    border:1px solid var(--line);
-    background:var(--panel);
-    display:flex;
-    flex-direction:column;
-    flex-wrap:wrap;
-    gap:12px;
+  .hint{font-size:12px; color:var(--dim); margin:0 0 22px; letter-spacing:.03em}
+  .hint kbd{
+    font-family:var(--mono); font-size:11px; color:var(--fg-soft);
+    border:1px solid var(--line-strong); background:var(--panel);
+    padding:1px 5px; margin:0 2px;
   }
-  .meta div{padding:12px 14px; border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
-  .meta div:nth-child(2n){border-right:0}
-  .meta div:nth-last-child(-n+2){border-bottom:0}
-  .meta dt{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-bottom:3px}
-  .meta dd{margin:0; color:var(--fg-soft); font-size:13px}
+
+  /* ---- shell ---- */
+  .shell{
+    border:1px solid var(--line-strong);
+    background:var(--panel);
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.9);
+    margin-bottom:56px;
+  }
+  .shell-bar{
+    display:flex; align-items:center; gap:12px;
+    border-bottom:1px solid var(--line);
+    background:var(--panel-2);
+    padding:9px 12px;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+  }
+  .shell-bar .dots{display:flex; gap:6px}
+  .shell-bar .dots i{width:8px; height:8px; display:block; border:1px solid var(--line-strong)}
+  .shell-bar .dots i:first-child{background:var(--accent-dim); border-color:var(--accent-dim)}
+  .shell-bar .title{flex:1; text-align:center; color:var(--fg-soft); letter-spacing:.08em}
+  .shell-bar .tag{color:var(--line-strong)}
+
+  .shell-body{
+    padding:16px 16px 14px;
+    max-height:min(56vh,460px);
+    overflow-y:auto;
+    font-size:13px;
+    line-height:1.65;
+    scrollbar-width:thin;
+    scrollbar-color:var(--line-strong) transparent;
+  }
+  .shell-body::-webkit-scrollbar{width:8px}
+  .shell-body::-webkit-scrollbar-thumb{background:var(--line-strong)}
+
+  .ln{white-space:pre-wrap; word-break:break-word; margin:0 0 2px; color:var(--fg-soft)}
+  .ln.dim{color:var(--dim)}
+  .ln.ok{color:var(--accent)}
+  .ln.err{color:var(--warn)}
+  .ln.cmd{color:var(--fg)}
+  .ln.cmd .pr{color:var(--accent-dim)}
+  .ln a{color:var(--accent); border-bottom:1px solid var(--line-strong)}
+  .ln a:hover{border-bottom-color:var(--accent)}
+  .ln .k{color:var(--accent); display:inline-block; min-width:9ch}
+  .ln .v{color:var(--fg)}
+
+  .shell-input{
+    display:flex; align-items:center; gap:8px;
+    border-top:1px solid var(--line);
+    padding:10px 16px 12px;
+    background:var(--panel-2);
+  }
+  .shell-input .pr{color:var(--accent); font-size:13px; white-space:nowrap}
+  .shell-input .pr b{color:var(--fg-soft); font-weight:400}
+  .shell-input input{
+    flex:1; min-width:0;
+    background:transparent; border:0; outline:0;
+    color:var(--fg);
+    font-family:var(--mono);
+    font-size:13px;
+    caret-color:var(--accent);
+    padding:0;
+  }
+  .shell-input input::placeholder{color:var(--line-strong)}
 
   /* ---- sections ---- */
-  section{margin-bottom:64px}
-  section:last-of-type{margin-bottom:44px}
+  section{margin-bottom:56px}
   .head{
     display:flex; align-items:baseline; gap:14px;
     border-bottom:1px solid var(--line);
     padding-bottom:10px;
-    margin-bottom:24px;
+    margin-bottom:22px;
   }
   .num{font-size:12px; color:var(--accent-dim); letter-spacing:.12em}
   h2{
     font-size:13px; letter-spacing:.16em; text-transform:uppercase;
     font-weight:500; color:var(--fg-soft); margin:0;
   }
-  p{margin:0 0 16px; max-width:66ch}
+  p{margin:0 0 16px; max-width:68ch}
   p.dim{color:var(--dim)}
   strong{color:#dfe9e2; font-weight:500}
+
+  /* ---- dossier ---- */
+  .dossier{border:1px solid var(--line); background:var(--panel); margin:0 0 18px}
+  .dossier div{display:flex; gap:14px; padding:11px 14px; border-bottom:1px solid var(--line)}
+  .dossier div:last-child{border-bottom:0}
+  .dossier dt{
+    font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim);
+    width:15ch; flex:0 0 auto; padding-top:2px;
+  }
+  .dossier dd{margin:0; color:var(--fg-soft); font-size:13px}
 
   /* ---- links ---- */
   .links{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line)}
   .link{
     display:grid;
-    grid-template-columns:28px 1fr auto auto;
+    grid-template-columns:30px 1fr auto auto;
     align-items:center;
     gap:14px;
     background:var(--panel);
@@ -146,9 +245,7 @@
   .link.placeholder .host{color:var(--line-strong)}
   .link.placeholder .go{color:var(--line-strong)}
 
-  .note{
-    margin-top:14px; font-size:12px; color:var(--dim); line-height:1.7;
-  }
+  .note{margin-top:14px; font-size:12px; color:var(--dim); line-height:1.7}
   .note code{color:var(--accent-dim); background:var(--panel); padding:1px 5px; border:1px solid var(--line)}
 
   /* ---- footer ---- */
@@ -161,15 +258,27 @@
   footer a{color:var(--dim); border-bottom:1px solid var(--line)}
   footer a:hover{color:var(--accent); border-bottom-color:var(--accent-dim)}
 
+  /* ---- cat ---- */
+  .cat{
+    position:fixed; left:0; top:0; z-index:30;
+    font-size:20px; line-height:1; pointer-events:none;
+    opacity:.85; will-change:transform;
+    transform:translate(-100px,-100px);
+  }
+
   :focus-visible{outline:1px solid var(--accent); outline-offset:3px}
 
-  @media (max-width:620px){
+  @media (max-width:640px){
     body{padding:0 16px 48px; font-size:13.5px}
-    .topbar{flex-wrap:wrap; margin-bottom:40px}
-    .nav{gap:14px; font-size:11px}
-    .hero{margin-bottom:48px}
-    .meta{grid-template-columns:1fr 1fr}
-    .meta div:nth-child(2n){border-right:0}
+    .topbar{margin-bottom:36px; font-size:11px; gap:10px}
+    .topbar .nav{display:none}
+    .hero{margin-bottom:40px}
+    .shell-body{max-height:52vh; padding:13px 13px 10px; font-size:12.5px}
+    .shell-input{padding:9px 13px 11px}
+    .shell-input .pr{font-size:11px}
+    .shell-input input{font-size:16px}
+    .dossier div{flex-direction:column; gap:3px}
+    .dossier dt{width:auto; padding-top:0}
     .link{grid-template-columns:22px 1fr auto; gap:10px; padding:13px 12px}
     .link .host{display:none}
   }
@@ -177,41 +286,72 @@
     html{scroll-behavior:auto}
     .cursor,.dot{animation:none}
     .link,.link .go{transition:none}
+    .fx::before{opacity:.3}
   }
 </style>
 </head>
 <body>
+<div class="fx" aria-hidden="true"></div>
+
 <div class="wrap">
 
   <div class="topbar">
     <span class="brand"><span class="p">~</span> furrestfire</span>
-    <span class="status"><span class="dot"></span> online</span>
-    <span class="nav"><a href="#about">about</a><a href="#links">links</a></span>
+    <span class="status"><span class="dot"></span> online <span id="clock" style="color:var(--dim)">--:--</span></span>
+    <span class="nav"><a href="#shell">shell</a><a href="#about">about</a><a href="#links">links</a></span>
   </div>
 
   <div class="hero">
-    <p class="eyebrow">personal site — est. 2026</p>
-    <h1>FurrestFire<span class="accent">.</span></h1>
-    <p class="tagline">Writer, reader, gamer. Keep making small things and long notes on characters that don't exist; spend time in games with a story worth following.<span class="cursor"></span></p>
+    <p class="eyebrow">personal site <b>/</b> static html <b>/</b> no trackers</p>
+    <h1>FurrestFire</h1>
 
-    <dl class="meta">
-      <dt>about</dt><dd>Writer, reader, gamer. Small things, long notes on characters that don't exist; spend time in games with a story worth following.</dd>
-    </dl>
+    <div class="banner" aria-hidden="true">
+<pre>█████ █   █ ████  ████  █████  ████ █████ █████ ████  █████
+█     █   █ █   █ █   █ █     █     █       █   █   █ █    
+████  █   █ ████  ████  ████   ███  ████    █   ████  ████ 
+█     █   █ █ █   █ █   █         █ █       █   █ █   █    
+█     █████ █  ██ █  ██ █████ ████  █     █████ █  ██ █████</pre>
+    </div>
+
+    <p class="tagline" id="tagline">Writer, reader, gamer. Small things, long notes on characters that don't exist.<span class="cursor" aria-hidden="true"></span></p>
+    <p class="hint">there's a shell below — type <kbd>help</kbd> or press <kbd>/</kbd> to jump in.</p>
+  </div>
+
+  <div class="shell" id="shell">
+    <div class="shell-bar">
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="title">furrestfire — zsh — 80×24</span>
+      <span class="tag">tty1</span>
+    </div>
+    <div class="shell-body" id="out" role="log" aria-live="polite" aria-label="terminal output">
+      <p class="ln dim">Last login: Sun Nov 15 01:24:07 on ttys000</p>
+      <p class="ln">furrestfire.github.io — a static page. nothing loaded from anywhere else.</p>
+      <p class="ln dim">type <span style="color:var(--accent)">help</span> for commands, <span style="color:var(--accent)">links</span> for the shortlist.</p>
+    </div>
+    <form class="shell-input" id="form" autocomplete="off">
+      <label class="pr" for="cmd"><b>furrestfire@pages</b>:~$</label>
+      <input id="cmd" name="cmd" type="text" placeholder="help" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="terminal command">
+    </form>
   </div>
 
   <section id="about">
     <div class="head"><span class="num">01</span><h2>about</h2></div>
-    <p>FurrestFire — a writer, reader, gamer. Keep making small things and long notes on characters that don't exist; spend time in games with a story worth following.</p>
-    <p>I write character-driven fiction — long profiles, half-finished scenes, the occasional short story — mostly in the SCP:RP / Sarkic corner of things. When I'm not writing, I'm in a game, or quietly rebuilding my own desktop so it runs faster and stays out of my way.</p>
-    <p class="dim">This page is a static HTML file. No scripts, no trackers, no analytics. Just text.</p>
+    <dl class="dossier">
+      <div><dt>handle</dt><dd>FurrestFire</dd></div>
+      <div><dt>occupation</dt><dd>Writer, reader, gamer</dd></div>
+      <div><dt>writing</dt><dd>Character-driven fiction — long profiles, half-finished scenes, the occasional short story</dd></div>
+      <div><dt>corner of things</dt><dd>SCP:RP / Sarkic</dd></div>
+      <div><dt>also</dt><dd>Quietly rebuilding my own desktop so it runs faster and stays out of my way</dd></div>
+    </dl>
+    <p>I write character-driven fiction — long profiles, half-finished scenes, the occasional short story — mostly in the SCP:RP / Sarkic corner of things. When I'm not writing, I'm in a game, or rebuilding my desktop so it runs faster and stays out of my way.</p>
+    <p class="dim">This page is one static HTML file. No scripts, no trackers, no analytics, no fonts to fetch. Just text.</p>
   </section>
 
   <section id="links">
     <div class="head"><span class="num">02</span><h2>links</h2></div>
 
-    <!-- LINKS: to add one, copy a .link block below and change the href,
-         the name and the small description. Remove class="placeholder"
-         once a link is real. -->
+    <!-- LINKS: copy a .link block, change the href/name/description,
+         and drop class="placeholder" once a link is real. -->
     <div class="links">
       <a class="link" href="https://github.com/furrestfire" target="_blank" rel="noopener">
         <span class="idx">01</span>
@@ -219,19 +359,19 @@
         <span class="host">github.com</span>
         <span class="go">→</span>
       </a>
-      <a class="link placeholder" href="#" data-empty="true">
+      <a class="link placeholder" href="#">
         <span class="idx">02</span>
-        <span class="name">Discord<small>add your handle or invite</small></span>
+        <span class="name">Discord<small>handle or invite goes here</small></span>
         <span class="host">—</span>
         <span class="go">→</span>
       </a>
-      <a class="link placeholder" href="#" data-empty="true">
+      <a class="link placeholder" href="#">
         <span class="idx">03</span>
-        <span class="name">Steam<small>add your profile</small></span>
+        <span class="name">Steam<small>profile link goes here</small></span>
         <span class="host">—</span>
         <span class="go">→</span>
       </a>
-      <a class="link placeholder" href="#" data-empty="true">
+      <a class="link placeholder" href="#">
         <span class="idx">04</span>
         <span class="name">Writing<small>a blog, AO3, or doc</small></span>
         <span class="host">—</span>
@@ -239,16 +379,267 @@
       </a>
     </div>
 
-    <div class="cat">😊</div>
-
-    <p class="note">Rows with a greyed arrow are empty placeholders — send me the URL and handle and I'll fill them in, or edit <code>index.html</code> yourself.</p>
+    <p class="note">Rows with a greyed arrow are empty placeholders — send me the URL and I'll fill them in, or edit <code>index.html</code> yourself.</p>
   </section>
 
-
+  <footer>
     <span>© 2026 furrestfire</span>
     <span>hosted on <a href="https://github.com/furrestfire/furrestfire.github.io">github pages</a></span>
   </footer>
 
 </div>
+
+<div class="cat" id="cat" aria-hidden="true">🐈</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- clock ---------- */
+  var clock = document.getElementById("clock");
+  function tick(){
+    var d = new Date();
+    clock.textContent = ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
+  }
+  tick(); setInterval(tick, 15000);
+
+  /* ---------- typewriter ---------- */
+  var tag = document.getElementById("tagline");
+  var full = tag.firstChild.nodeValue;
+  if(!reduce){
+    tag.firstChild.nodeValue = "";
+    var i = 0;
+    (function type(){
+      if(i >= full.length) return;
+      tag.firstChild.nodeValue = full.slice(0, ++i);
+      setTimeout(type, full.charAt(i-1) === "." ? 260 : 26);
+    })();
+  }
+
+  /* ---------- shell ---------- */
+  var out = document.getElementById("out");
+  var form = document.getElementById("form");
+  var input = document.getElementById("cmd");
+  var hist = [], hi = 0;
+  var boot = Date.now();
+
+  function raw(cls){
+    var p = document.createElement("p");
+    p.className = "ln" + (cls ? " " + cls : "");
+    out.appendChild(p);
+    out.scrollTop = out.scrollHeight;
+    return p;
+  }
+
+  function line(text, cls){
+    var p = raw(cls);
+    p.textContent = text;
+    return p;
+  }
+
+  function echo(cmd){
+    var p = raw("cmd");
+    var s = document.createElement("span");
+    s.className = "pr";
+    s.textContent = "furrestfire@pages:~$ ";
+    p.appendChild(s);
+    p.appendChild(document.createTextNode(cmd));
+  }
+
+  var LINKS = [
+    {name:"GitHub", note:"code, repos, the occasional experiment", url:"https://github.com/furrestfire"},
+    {name:"Discord", note:"handle or invite goes here", url:null},
+    {name:"Steam", note:"profile link goes here", url:null},
+    {name:"Writing", note:"a blog, AO3, or doc", url:null}
+  ];
+
+  var COMMANDS = ["help","about","links","whoami","ls","cat","date","uptime","neofetch","clear","sudo","ping","echo","exit"];
+
+  var FILES = {
+    "about.txt":"writer, reader, gamer. character-driven fiction, mostly SCP:RP / Sarkic. games with a story worth following.",
+    "links.txt":"github.com/furrestfire — discord, steam, writing: pending.",
+    "readme.md":"static html. one file. no trackers, no analytics, no external fonts. edit index.html and push."
+  };
+
+  function help(){
+    line("commands:", "dim");
+    line("  help        this list");
+    line("  about       who this is");
+    line("  links       the shortlist");
+    line("  whoami      current user");
+    line("  ls          files in ~");
+    line("  cat <file>  print a file");
+    line("  neofetch    system + site info");
+    line("  date        local time");
+    line("  uptime      time since page load");
+    line("  ping <host> pretend network test");
+    line("  echo <text> say it back");
+    line("  clear       wipe the screen");
+    line("  sudo        nice try");
+    line("");
+    line("tab completes, ↑/↓ for history.", "dim");
+  }
+
+  function about(){
+    line("FurrestFire — writer, reader, gamer.", "ok");
+    line("Character-driven fiction: long profiles, half-finished scenes, the occasional short story.");
+    line("Mostly the SCP:RP / Sarkic corner of things. Otherwise: games with a story worth following,", "dim");
+    line("and a desktop kept lean enough to stay out of the way.", "dim");
+  }
+
+  function links(){
+    line("~ / links", "dim");
+    LINKS.forEach(function(l, n){
+      var p = raw();
+      var idx = document.createElement("span");
+      idx.className = "k";
+      idx.textContent = "  " + ("0"+(n+1)).slice(-2);
+      p.appendChild(idx);
+      if(l.url){
+        var a = document.createElement("a");
+        a.href = l.url; a.target = "_blank"; a.rel = "noopener";
+        a.textContent = l.name;
+        p.appendChild(a);
+      } else {
+        var s = document.createElement("span");
+        s.style.color = "var(--dim)";
+        s.textContent = l.name;
+        p.appendChild(s);
+      }
+      p.appendChild(document.createTextNode("  " + l.note));
+    });
+    line("");
+    line("(grey entries are placeholders)", "dim");
+  }
+
+  function neofetch(){
+    var rows = [
+      ["handle", "furrestfire"],
+      ["role", "writer / reader / gamer"],
+      ["site", "static html, 1 file"],
+      ["scripts", "0 external"],
+      ["trackers", "0"],
+      ["theme", "dark grey-green"],
+      ["host", "github pages"],
+      ["uptime", Math.floor((Date.now()-boot)/1000) + "s"]
+    ];
+    line("furrestfire@pages", "ok");
+    line("-----------------", "dim");
+    rows.forEach(function(r){
+      var p = raw();
+      var k = document.createElement("span");
+      k.className = "k";
+      k.textContent = r[0];
+      p.appendChild(k);
+      var v = document.createElement("span");
+      v.className = "v";
+      v.textContent = r[1];
+      p.appendChild(v);
+    });
+  }
+
+  function run(rawCmd){
+    var cmd = rawCmd.trim();
+    if(!cmd) return;
+    echo(cmd);
+    hist.push(cmd); hi = hist.length;
+
+    var c = cmd.split(/\s+/)[0].toLowerCase();
+    var arg = cmd.slice(c.length).trim();
+
+    switch(c){
+      case "help": help(); break;
+      case "about": about(); break;
+      case "links": links(); break;
+      case "whoami": line("furrestfire", "ok"); break;
+      case "ls": line("about.txt   links.txt   readme.md", "ok"); break;
+      case "cat":
+        if(!arg){ line("usage: cat <file>", "err"); }
+        else if(FILES[arg.toLowerCase()]){ line(FILES[arg.toLowerCase()]); }
+        else {
+          line("cat: " + arg + ": no such file", "err");
+          line("try: " + Object.keys(FILES).join(", "), "dim");
+        }
+        break;
+      case "date": line(new Date().toString()); break;
+      case "uptime": line("up " + Math.floor((Date.now()-boot)/1000) + "s, 1 user, load average: 0.00, 0.00, 0.00"); break;
+      case "neofetch": neofetch(); break;
+      case "clear": out.textContent = ""; break;
+      case "sudo": line("nice try — you're already root here.", "err"); break;
+      case "ping":
+        var host = arg || "furrestfire.github.io";
+        line("PING " + host + " (static): 56 data bytes");
+        line("64 bytes from " + host + ": icmp_seq=0 ttl=64 time=0.0 ms (it's all local)", "dim");
+        line("--- " + host + " ping statistics ---");
+        line("1 packets transmitted, 1 received, 0% packet loss", "ok");
+        break;
+      case "echo": line(arg); break;
+      case "exit": line("there's no leaving a web page. scroll instead.", "dim"); break;
+      default: line(c + ": command not found — try 'help'", "err");
+    }
+    out.scrollTop = out.scrollHeight;
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var v = input.value;
+    input.value = "";
+    run(v);
+  });
+
+  input.addEventListener("keydown", function(e){
+    if(e.key === "ArrowUp"){
+      if(hi > 0){ hi--; input.value = hist[hi] || ""; }
+      e.preventDefault();
+    } else if(e.key === "ArrowDown"){
+      if(hi < hist.length){ hi++; input.value = hist[hi] || ""; }
+      e.preventDefault();
+    } else if(e.key === "Tab"){
+      var v = input.value.trim();
+      if(!v) return;
+      var hit = COMMANDS.filter(function(x){ return x.indexOf(v) === 0; });
+      if(hit.length === 1){ input.value = hit[0] + " "; e.preventDefault(); }
+      else if(hit.length > 1){ line(hit.join("  "), "dim"); e.preventDefault(); }
+    } else if(e.key === "l" && (e.ctrlKey || e.metaKey)){
+      out.textContent = ""; e.preventDefault();
+    }
+  });
+
+  /* "/" jumps into the shell from anywhere on the page */
+  document.addEventListener("keydown", function(e){
+    var el = document.activeElement;
+    if(e.key === "/" && el !== input && el.tagName !== "INPUT" && el.tagName !== "TEXTAREA"){
+      e.preventDefault();
+      input.focus();
+      document.getElementById("shell").scrollIntoView({block:"center", behavior: reduce ? "auto" : "smooth"});
+    }
+  });
+
+  document.getElementById("shell").addEventListener("click", function(e){
+    if(window.getSelection().toString()) return;
+    if(e.target.tagName === "A") return;
+    input.focus();
+  });
+
+  /* ---------- cat ---------- */
+  var cat = document.getElementById("cat");
+  if(reduce){
+    cat.style.display = "none";
+  } else {
+    var cx = -100, cy = -100, tx = -100, ty = -100;
+    window.addEventListener("mousemove", function(e){
+      tx = e.clientX + 14; ty = e.clientY + 16;
+    }, {passive:true});
+    (function follow(){
+      cx += (tx-cx) * 0.12;
+      cy += (ty-cy) * 0.12;
+      cat.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px)";
+      requestAnimationFrame(follow);
+    })();
+  }
+})();
+</script>
 </body>
 </html>
